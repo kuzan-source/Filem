@@ -15,6 +15,12 @@ import java.util.stream.Collectors
  */
 class LocalDataSource {
 
+    // Obtener es directorio raiz del dispositivo
+    fun getRootPath(): Path {
+        val externalStorage: File = Environment.getExternalStorageDirectory()
+        return externalStorage.toPath()
+    }
+
     // Crear un nuevo directorio tomando como base un directorio
     fun createDirectory(dirPath: Path, nameDir: String): Boolean {
         return try {
