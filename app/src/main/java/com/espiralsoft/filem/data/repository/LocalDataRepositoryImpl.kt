@@ -3,6 +3,8 @@ package com.espiralsoft.filem.data.repository
 import com.espiralsoft.filem.data.local.LocalDataSource
 import com.espiralsoft.filem.domain.repository.DirectoryRepository
 import com.espiralsoft.filem.domain.repository.FileRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.nio.file.Path
 
 class LocalDataRepositoryImpl(
@@ -14,9 +16,15 @@ class LocalDataRepositoryImpl(
     ): Boolean {
         TODO("Not yet implemented")
     }
+
+    // Obtener los directorios de un path
     override suspend fun getDirectories(dirPath: Path): List<Path> {
-        return localDataSource.getDirectories(dirPath)
+        // Cambia al hilo de I/O
+        return withContext(Dispatchers.IO) {
+            localDataSource.getDirectories(dirPath)
+        }
     }
+
     override suspend fun renameDirectory(
         dirPath: Path,
         newNameDir: String
@@ -44,9 +52,15 @@ class LocalDataRepositoryImpl(
     ): Boolean {
         TODO("Not yet implemented")
     }
+
+    // Obtener los archivos de un path
     override suspend fun getFiles(dirPath: Path): List<Path> {
-        return localDataSource.getFiles(dirPath)
+        // Cambia al hilo de I/O
+        return withContext(Dispatchers.IO) {
+            localDataSource.getFiles(dirPath)
+        }
     }
+
     override suspend fun renameFile(
         filePath: Path,
         newName: String
