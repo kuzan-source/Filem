@@ -8,8 +8,9 @@ import com.espiralsoft.filem.domain.usecase.FileUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.nio.file.Path
 import javax.inject.Inject
 
@@ -26,21 +27,23 @@ class FileListHubViewModel @Inject constructor(
     private val _state: MutableStateFlow<FileListHubState> = MutableStateFlow(FileListHubState())
 
     // Estado de la pantalla público
-    val state: StateFlow<FileListHubState> get() = _state
+    val state = _state.asStateFlow()
 
     // Carga de directorios y archivos en root
     fun loadPath(pathDirectory: Path) {
-        viewModelScope.launch(Dispatchers.IO) {
-
+        viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
 
-            val rootFiles: List<Path> = fileUseCases.getFiles(pathDirectory) // LIsta de archivos de root
-            val rootDirectories: List<Path> = directoryUseCases.getDirectories(pathDirectory) // Lista de directorios de root
+            val (files, dirs) = withContext(Dispatchers.IO) {
+                val files = fileUseCases.getFiles(pathDirectory)
+                val dirs = directoryUseCases.getDirectories(pathDirectory)
+                files to dirs
+            }
 
             // Actualizar el estado de la pantalla
             _state.value = _state.value.copy(
-                directories = rootDirectories,
-                files = rootFiles,
+                directories = dirs,
+                files = files,
                 isLoading = false
             )
 
