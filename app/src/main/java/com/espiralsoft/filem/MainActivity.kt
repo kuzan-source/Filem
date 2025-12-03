@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!PermissionUtils.hasPermissions(this)) {
+        if (!PermissionUtils.hasPermissions()) {
             PermissionUtils.requestAllFilesAccessPermission(this)
         }
 
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (!PermissionUtils.hasPermissions(this)) {
+        if (!PermissionUtils.hasPermissions()) {
             Toast.makeText(this, "Se requieren permisos para usar la app", Toast.LENGTH_LONG).show()
         }
 
