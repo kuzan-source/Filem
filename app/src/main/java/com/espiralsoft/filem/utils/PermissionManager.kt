@@ -26,7 +26,7 @@ object PermissionUtils {
             val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
             intent.data = "package:${context.packageName}".toUri()
             context.startActivity(intent)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // fallback si falla el intent anterior
             val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
             context.startActivity(intent)
