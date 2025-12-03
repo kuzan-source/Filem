@@ -1,15 +1,9 @@
 package com.espiralsoft.filem.utils
 
-import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Environment
 import android.provider.Settings
-import androidx.activity.result.ActivityResultLauncher
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 
 /**
@@ -20,7 +14,7 @@ object PermissionUtils {
     /**
      * Verifica si la app tiene permisos para acceder al almacenamiento externo
      */
-    fun hasPermissions(context: Context): Boolean {
+    fun hasPermissions(): Boolean {
         return Environment.isExternalStorageManager()
     }
 
