@@ -19,13 +19,10 @@
 
 package com.espiralsoft.filem
 
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import com.espiralsoft.filem.navigation.AppNavigation
 import com.espiralsoft.filem.presentation.ui.theme.FilemTheme
 import com.espiralsoft.filem.utils.PermissionUtils
@@ -36,6 +33,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!PermissionUtils.hasPermissions(this)) {
+            PermissionUtils.requestAllFilesAccessPermission(this)
+        }
+
         setContent {
             FilemTheme {
                 AppNavigation()
@@ -45,15 +47,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onStart() {
         super.onStart()
-        requestStoragePermissions()
     }
 
     override fun onResume() {
         super.onResume()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-            Environment.isExternalStorageManager()) {
-            Toast.makeText(this, "Permiso concedido", Toast.LENGTH_SHORT).show()
+
+        if (!PermissionUtils.hasPermissions(this)) {
+            Toast.makeText(this, "Se requieren permisos para usar la app", Toast.LENGTH_LONG).show()
         }
+
+    }
+
+    override fun onRestart() {
+        super.onRestart()
     }
 
     override fun onPause() {
@@ -66,25 +72,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-    }
-    private val storagePermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        val allGranted = permissions.values.all { it }
-        if (!allGranted) {
-            Toast.makeText(this, "Se requieren permisos para usar la app", Toast.LENGTH_LONG).show()
-            finish()
-        }
-    }
-
-    private fun requestStoragePermissions() {
-        if (!PermissionUtils.hasPermissions(this)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                PermissionUtils.requestAllFilesAccessPermission(this)
-            } else {
-                PermissionUtils.requestLegacyStoragePermissions(storagePermissionLauncher)
-            }
-        }
     }
 
 }
