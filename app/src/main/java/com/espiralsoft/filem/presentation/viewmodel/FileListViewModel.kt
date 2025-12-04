@@ -2,11 +2,10 @@ package com.espiralsoft.filem.presentation.viewmodel
 
 import com.espiralsoft.filem.domain.usecase.DirectoryUseCases
 import com.espiralsoft.filem.domain.usecase.FileUseCases
+import com.espiralsoft.filem.presentation.state.FileListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.espiralsoft.filem.presentation.state.FileListState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -27,20 +26,20 @@ class FileListViewModel @Inject constructor(
     val state: StateFlow<FileListState> get() = _state // Estado publico de la pantalla
 
     //  Carga el contenido del directorio especificado
-    private fun loadPath(pathDirectory: Path) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun loadPath(pathDirectory: Path) {
+        viewModelScope.launch {
 
             _state.value = _state.value.copy(
                 isLoading = true
             )
 
-            val rootFiles: List<Path> = fileUseCases.getFiles(pathDirectory) // LIsta de archivos de root
-            val rootDirectories: List<Path> = directoryUseCases.getDirectories(pathDirectory) // Lista de directorios de root
+            //¿Agregar un "coroutineScope" para ambas operaciones?
+            val dirs: List<Path> = directoryUseCases.getDirectories(pathDirectory)
+            val files: List<Path> = fileUseCases.getFiles(pathDirectory)
 
-            // Actualizar el estado de la pantalla
             _state.value = _state.value.copy(
-                directories = rootDirectories,
-                files = rootFiles,
+                directories = dirs,
+                files = files,
                 isLoading = false
             )
 
