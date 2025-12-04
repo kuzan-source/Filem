@@ -19,8 +19,8 @@ import java.nio.file.Path
 
 @Composable
 fun AppNavigation() {
+
     val navController = rememberNavController()
-    val context = LocalContext.current
     val rootPath = getRootPath()
 
     NavHost(
@@ -48,6 +48,7 @@ fun AppNavigation() {
                 initialPath = path,
                 onNavigateBack = { navController.popBackStack() }
             )
+
         }
     }
 }
