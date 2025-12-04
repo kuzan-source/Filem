@@ -1,12 +1,13 @@
 package com.espiralsoft.filem.data.local
 
 import android.os.Environment
-import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
-import java.util.stream.Collectors
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.listDirectoryEntries
 
 /**
  * Logica para manipular directorios y archivos
@@ -17,8 +18,7 @@ class LocalDataSource {
 
     // Obtener es directorio raiz del dispositivo
     fun getRootPath(): Path {
-        val externalStorage: File = Environment.getExternalStorageDirectory()
-        return externalStorage.toPath()
+        return Environment.getExternalStorageDirectory().toPath()
     }
 
     // Crear un nuevo directorio tomando como base un directorio
@@ -34,11 +34,9 @@ class LocalDataSource {
     // Obtener los directorios en un directorio
     fun getDirectories(dirPath: Path): List<Path> {
         return try {
-            Files.list(dirPath).use { it ->
-                it.filter { Files.isDirectory(it) }
-                    .collect(Collectors.toList())
-            }
-        } catch (e: IOException) {
+            dirPath.listDirectoryEntries()
+                .filter { it.isDirectory() }
+        } catch (_: IOException) {
             emptyList()
         }
     }
@@ -114,11 +112,9 @@ class LocalDataSource {
     // Obtener los archivos en un directorio
     fun getFiles(dirPath: Path): List<Path> {
         return try {
-            Files.list(dirPath).use { stream ->
-                stream.filter { path -> Files.isRegularFile(path) }
-                    .collect(Collectors.toList())
-            }
-        } catch (e: IOException) {
+            dirPath.listDirectoryEntries()
+                .filter { it.isRegularFile() }
+        } catch (_: IOException) {
             emptyList()
         }
     }
