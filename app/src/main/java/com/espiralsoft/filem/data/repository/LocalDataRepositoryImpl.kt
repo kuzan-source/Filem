@@ -7,9 +7,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.nio.file.Path
 
+/**
+ * Implementacion del repositorio local para directorios y archivos
+ * Actúa como un adaptador de concurrencia que envuelve la llamada real.
+ */
 class LocalDataRepositoryImpl(
     private val localDataSource: LocalDataSource
 ) : DirectoryRepository, FileRepository {
+
     override suspend fun createDirectory(
         dirPath: Path,
         nameDir: String
