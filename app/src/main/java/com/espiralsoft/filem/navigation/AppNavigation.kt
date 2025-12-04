@@ -7,7 +7,6 @@ import android.net.Uri
 import com.espiralsoft.filem.presentation.ui.screens.FileListHubScreen
 import java.nio.file.Paths
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,7 +14,6 @@ import com.espiralsoft.filem.presentation.ui.screens.FileListScreen
 import com.espiralsoft.filem.utils.NavigationUtility
 import com.espiralsoft.filem.utils.NavigationUtility.Explorer.createRoute
 import com.espiralsoft.filem.utils.NavigationUtility.getRootPath
-import java.nio.file.Path
 
 @Composable
 fun AppNavigation() {
