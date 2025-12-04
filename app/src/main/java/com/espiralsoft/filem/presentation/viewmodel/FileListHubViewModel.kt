@@ -1,16 +1,14 @@
 package com.espiralsoft.filem.presentation.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.espiralsoft.filem.presentation.state.FileListHubState
 import com.espiralsoft.filem.domain.usecase.DirectoryUseCases
 import com.espiralsoft.filem.domain.usecase.FileUseCases
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.nio.file.Path
 import javax.inject.Inject
 
@@ -30,20 +28,23 @@ class FileListHubViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     // Carga de directorios y archivos en root
-    fun loadPath(pathDirectory: Path) {
+    fun loadPath(pathRootDirectory: Path) {
+        // El path siempre deberia ser el de root
+        //¿Es necesario pasar un parametro? No lo creo
+
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
 
-            val (files, dirs) = withContext(Dispatchers.IO) {
-                val files = fileUseCases.getFiles(pathDirectory)
-                val dirs = directoryUseCases.getDirectories(pathDirectory)
-                files to dirs
-            }
-
-            // Actualizar el estado de la pantalla
             _state.value = _state.value.copy(
-                directories = dirs,
-                files = files,
+                isLoading = true
+            )
+
+            //¿Agregar un coroutineScope?
+            val dirsRoot: List<Path> = directoryUseCases.getDirectories(pathRootDirectory)
+            val filesRoot: List<Path> = fileUseCases.getFiles(pathRootDirectory)
+
+            _state.value = _state.value.copy(
+                directories = dirsRoot,
+                files = filesRoot,
                 isLoading = false
             )
 
