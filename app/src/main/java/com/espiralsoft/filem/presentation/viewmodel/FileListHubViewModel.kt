@@ -1,5 +1,6 @@
 package com.espiralsoft.filem.presentation.viewmodel
 
+import com.espiralsoft.filem.domain.model.FileEntity
 import com.espiralsoft.filem.presentation.state.FileListHubState
 import com.espiralsoft.filem.domain.usecase.DirectoryUseCases
 import com.espiralsoft.filem.domain.usecase.FileUseCases
@@ -40,7 +41,7 @@ class FileListHubViewModel @Inject constructor(
 
             //¿Agregar un coroutineScope?
             val dirsRoot: List<Path> = directoryUseCases.getDirectories(pathRootDirectory)
-            val filesRoot: List<Path> = fileUseCases.getFiles(pathRootDirectory)
+            val filesRoot: List<FileEntity> = fileUseCases.getFiles(pathRootDirectory)
 
             _state.value = _state.value.copy(
                 directories = dirsRoot,
