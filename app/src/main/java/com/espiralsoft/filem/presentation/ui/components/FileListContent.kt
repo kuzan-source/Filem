@@ -4,21 +4,20 @@
  */
 package com.espiralsoft.filem.presentation.ui.components
 
-import com.espiralsoft.filem.utils.FileType
+import com.espiralsoft.filem.domain.model.FileEntity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import java.nio.file.Path
 
 @Composable
 fun FileListContent(
-    directories: List<Path>,
     modifier: Modifier = Modifier,
-    files: List<Path>,
+    directories: List<Path>,
+    files: List<FileEntity>,
     selectedItems: Set<Path>,
     onNavigateTo: (Path) -> Unit,
     //toggleSelection: (Path) -> Unit,
@@ -46,11 +45,9 @@ fun FileListContent(
             items = files,
             key = { it.toString() }
         ) { file ->
-            val fileType: FileType = remember(file) { FileType.fromFile(file.toFile()) }
             FileItem(
-                pathFile = file,
-                fileType = fileType,
-                isSelected = selectedItems.contains(file),
+                fileEntity = file,
+                isSelected = false,
                 onClick = {
                     /*
                     if (selectedItems.isNotEmpty()) {
