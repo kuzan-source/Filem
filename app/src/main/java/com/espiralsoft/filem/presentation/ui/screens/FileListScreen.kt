@@ -33,11 +33,11 @@ fun FileListScreen(
     onNavigateBack: () -> Unit, // ViewModel de la pantalla
 ) {
 
+    val state by viewModel.state.collectAsState()
+
     LaunchedEffect(initialPath) {
         viewModel.initWithPath(initialPath)
     }
-
-    val state by viewModel.state.collectAsState()
 
     Scaffold(
         topBar = {
