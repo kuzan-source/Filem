@@ -61,10 +61,19 @@ class LocalDataRepositoryImpl(
     }
 
     // Obtener los archivos de un path
-    override suspend fun getFiles(dirPath: Path): List<Path> {
-        // Cambia al hilo de I/O
+    override suspend fun getFiles(dirPath: Path): List<FileEntity> {
         return withContext(Dispatchers.IO) {
-            localDataSource.getFiles(dirPath)
+            val paths: List<Path> = localDataSource.getFiles(dirPath)
+            paths.map { path ->
+                //¿Se puede cambiar la manera en que se hace esto?
+                //No quiero usar java.io.file
+                FileEntity(
+                    name = path.toFile().name,
+                    path = path.toFile().absolutePath,
+                    size = path.toFile().length(),
+                    fileType = detectTypeFromExtension(path)
+                )
+            }
         }
     }
 
