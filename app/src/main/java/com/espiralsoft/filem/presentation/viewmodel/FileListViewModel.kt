@@ -3,6 +3,7 @@ package com.espiralsoft.filem.presentation.viewmodel
 import com.espiralsoft.filem.domain.usecase.DirectoryUseCases
 import com.espiralsoft.filem.domain.usecase.FileUseCases
 import com.espiralsoft.filem.presentation.state.FileListState
+import com.espiralsoft.filem.domain.model.FileEntity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,7 +36,7 @@ class FileListViewModel @Inject constructor(
 
             //¿Agregar un "coroutineScope" para ambas operaciones?
             val dirs: List<Path> = directoryUseCases.getDirectories(pathDirectory)
-            val files: List<Path> = fileUseCases.getFiles(pathDirectory)
+            val files: List<FileEntity> = fileUseCases.getFiles(pathDirectory)
 
             _state.value = _state.value.copy(
                 directories = dirs,
