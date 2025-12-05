@@ -1,10 +1,11 @@
 /**
- * Representa un archivo(FileItem), con sus caracteristicas y las acciones que puede realizar
+ * Representa un archivo con sus caracteristicas y las acciones que puede realizar
  * Las caracteristicas son: el icon(depende de su tipo), nombre, ruta, tamaño, y la posibilidad
  * de realizar alguna accion al hacer click(La accion aqui no esta definida)
  */
 package com.espiralsoft.filem.presentation.ui.components
 
+import com.espiralsoft.filem.domain.model.FileEntity
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.Column
@@ -27,13 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
-import com.espiralsoft.filem.utils.FileType
-import java.nio.file.Path
 
 @Composable
 fun FileItem(
-    pathFile: Path,
-    fileType: FileType,
+    fileEntity: FileEntity,
     isSelected: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit
@@ -62,7 +60,7 @@ fun FileItem(
                 contentAlignment = Alignment.Center,
                 content = {
                     // Ponerle el icono al tipo de archivo
-                    FileIcon(file = pathFile.toFile(), fileType = fileType)
+                    FileIcon(fileEntity)
                 }
             )
 
@@ -70,11 +68,11 @@ fun FileItem(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = pathFile.fileName.toString(),
+                    text = fileEntity.name,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = pathFile.toString(),
+                    text = fileEntity.path,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
